@@ -1,19 +1,28 @@
-import { Title } from "solid-start";
-import Counter from "~/components/Counter";
+import { createEffect, onCleanup } from "solid-js";
 
-export default function Home() {
+function HomePage() {
+  createEffect(() => {
+    // Create and append Stripe script
+    const stripeScript = document.createElement("script");
+    stripeScript.async = true;
+    stripeScript.src = "https://js.stripe.com/v3/pricing-table.js";
+    document.head.appendChild(stripeScript);
+
+    // Cleanup to remove script when component unmounts
+    onCleanup(() => {
+      document.head.removeChild(stripeScript);
+    });
+  });
+
   return (
-    <main>
-      <Title>Hello World</Title>
-      <h1>Hello world!</h1>
-      <Counter />
-      <p>
-        Visit{" "}
-        <a href="https://start.solidjs.com" target="_blank">
-          start.solidjs.com
-        </a>{" "}
-        to learn how to build SolidStart apps.
-      </p>
-    </main>
+    <>
+      {/* Your existing JSX code */}
+      <stripe-pricing-table 
+        pricing-table-id="prctbl_1NskZ3E3w74qrgxu2w3V8mnW" 
+        publishable-key="pk_live_D48AKbmvPqwUhU5ToTVOcuWU">
+      </stripe-pricing-table>
+    </>
   );
 }
+
+export default HomePage;
